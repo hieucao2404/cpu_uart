@@ -1,5 +1,7 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  --include "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new" \
+"../../../../cpu_uart.srcs/sources_1/new/ahb_i2c.v" \
+"../../../../cpu_uart.srcs/sources_1/new/ahb_pmu.v" \
 "../../../../cpu_uart.srcs/sources_1/new/ahb_ram.v" \
 "../../../../cpu_uart.srcs/sources_1/new/ahb_spi.v" \
 "../../../../cpu_uart.srcs/sources_1/new/ahb_to_apb.v" \
@@ -8,6 +10,8 @@ verilog xil_defaultlib  --include "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sou
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/control_unit.v" \
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/cpu_core.v" \
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/decode.v" \
+"../../../../cpu_uart.srcs/sources_1/new/i2c_master.v" \
+"../../../../cpu_uart.srcs/sources_1/new/i2c_slave.v" \
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/imem.v" \
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/imm_gen.v" \
 "../../../../../RISC-V_CPU/RISC-V_CPU.srcs/sources_1/new/pc_logic.v" \
