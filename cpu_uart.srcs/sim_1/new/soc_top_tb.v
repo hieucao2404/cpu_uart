@@ -33,12 +33,22 @@ module soc_top_tb();
     wire [31:0] out_pc;
     wire [31:0] out_alu_result;
     
+    
+    // --- SPI Physical Pins
+    wire mosi_pin;
+    wire miso_pin;
+    wire sclk_pin;
+    wire cs_pin;
+    
+    // --- SPI Hardware Loopback ---
+    assign miso_pin = mosi_pin;
     // ---------------------------------------------------------
     // 2. THE HARDWARE LOOPBACK
     // This physically wires the transmit pin directly to the receive pin.
     // Whatever the CPU shouts out of TX, it will immediately hear on RX.
     // ---------------------------------------------------------
     assign rx_pin = tx_pin;
+    assign mosi_pin = miso_pin;
 
     // --- 4. Instantiate the Motherboard ---
     soc_top uut (
@@ -46,6 +56,12 @@ module soc_top_tb();
         .reset(reset),
         .rx_pin(rx_pin),
         .tx_pin(tx_pin),
+        
+        .mosi_pin(mosi_pin),
+        .miso_pin(miso_pin),
+        .sclk_pin(sclk_pin),
+        
+        .cs_pin(cs_pin),
         .out_pc(out_pc),
         .out_alu_result(out_alu_result)
     );

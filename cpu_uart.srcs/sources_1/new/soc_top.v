@@ -8,6 +8,11 @@ module soc_top (
     input  wire rx_pin,
     output wire tx_pin,
     
+    output wire mosi_pin,
+    input wire miso_pin,
+    output wire sclk_pin,
+    output wire cs_pin,
+    
     // Debug/Implementation pins
     output wire [31:0] out_pc,
     output wire [31:0] out_alu_result
@@ -21,6 +26,7 @@ module soc_top (
     wire [2:0]  hsize;
     wire [31:0] hrdata;
     wire        hready;
+    
 
     // --- AHB Slave Wires ---
     wire        hsel_apb;
@@ -46,6 +52,12 @@ module soc_top (
     // 1. Address Decoder (Where is the CPU trying to talk?)
     wire is_apb = (haddr[31:16] == 16'h4000);
     wire is_ram = (haddr[31:16] == 16'h0000);
+    wire is_spi = (haddr[31:16] == 16'h5000);
+    
+    
+    wire hsel_spi = is_spi & (htrans == 2'b10);
+    wire hready_spi;
+    wire [31:0] hrdata_spi;
     
     // 2. Select Signals: Only trigger if the CPU is making a valid request (NONSEQ)
     assign hsel_apb = is_apb & (htrans == 2'b10);
@@ -53,10 +65,10 @@ module soc_top (
 
     // 3. The Data & Stall Multiplexer
     // The CPU must stall if ANY selected peripheral asks it to wait.
-    assign hready = hready_apb & hready_ram; 
+    assign hready = hready_apb & hready_ram & hready_spi; 
     
     // Route the requested read data back to the CPU based on the address space
-    assign hrdata = is_apb ? hrdata_apb : hrdata_ram;
+    assign hrdata = is_apb ? hrdata_apb : is_spi ? hrdata_spi : hrdata_ram;
 
     // =========================================================================
     // MODULE INSTANTIATIONS
@@ -101,7 +113,8 @@ module soc_top (
         .penable(penable),
         .pwrite(pwrite),
         .paddr(paddr),
-        .pwdata(pwdata)
+        .pwdata(pwdata),
+        .prdata(prdata) 
     );
 
     // 3. The UART Peripheral (APB Slave)
@@ -121,6 +134,26 @@ module soc_top (
         // External Pins
         .rx_pin(rx_pin),
         .tx_pin(tx_pin)
+    );
+    
+    ahb_spi my_spi(
+        .hclk(clk),
+        .hresetn(~reset),
+        
+        // AHB Slave Ports
+        .hsel(hsel_spi),
+        .haddr(haddr),
+        .hwdata(hwdata),
+        .hwrite(hwrite),
+        .htrans(htrans),
+        .hrdata(hrdata_spi),
+        .hreadyout(hready_spi),
+        
+        // Physical SPI Pins
+        .mosi(mosi_pin),
+        .miso(miso_pin),
+        .sclk(sclk_pin),
+        .cs(cs_pin)
     );
 
     // 4. The Data RAM (AHB Slave)

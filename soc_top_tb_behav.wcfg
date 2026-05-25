@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="140300001fs"></ZoomEndTime>
-      <Cursor1Time time="96200000fs"></Cursor1Time>
+      <ZoomEndTime time="117500001fs"></ZoomEndTime>
+      <Cursor1Time time="61835000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="228"></NameColumnWidth>
-      <ValueColumnWidth column_width="190"></ValueColumnWidth>
+      <ValueColumnWidth column_width="178"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="26" />
+   <WVObjectSize size="27" />
    <wvobject fp_name="/soc_top_tb/uut/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -48,53 +48,17 @@
       <obj_property name="label">CPU &amp; MEMORY</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/my_cpu/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/my_cpu/reset" type="logic">
-      <obj_property name="ElementShortName">reset</obj_property>
-      <obj_property name="ObjectShortName">reset</obj_property>
-   </wvobject>
    <wvobject fp_name="/soc_top_tb/uut/my_cpu/out_pc" type="array">
       <obj_property name="ElementShortName">out_pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">out_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/cpu_mem_we" type="logic">
-      <obj_property name="ElementShortName">cpu_mem_we</obj_property>
-      <obj_property name="ObjectShortName">cpu_mem_we</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/my_cpu/mem_addr_out" type="array">
-      <obj_property name="ElementShortName">mem_addr_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">mem_addr_out[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/my_cpu/mem_wdata_out" type="array">
-      <obj_property name="ElementShortName">mem_wdata_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">mem_wdata_out[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider34">
       <obj_property name="label">APB BUS</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/apb_transfer" type="logic">
-      <obj_property name="ElementShortName">apb_transfer</obj_property>
-      <obj_property name="ObjectShortName">apb_transfer</obj_property>
-   </wvobject>
    <wvobject fp_name="/soc_top_tb/uut/my_bridge/current_state" type="array">
       <obj_property name="ElementShortName">current_state[1:0]</obj_property>
       <obj_property name="ObjectShortName">current_state[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/apb_psel" type="logic">
-      <obj_property name="ElementShortName">apb_psel</obj_property>
-      <obj_property name="ObjectShortName">apb_psel</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/apb_penable" type="logic">
-      <obj_property name="ElementShortName">apb_penable</obj_property>
-      <obj_property name="ObjectShortName">apb_penable</obj_property>
-   </wvobject>
-   <wvobject fp_name="/soc_top_tb/uut/apb_pwdata" type="array">
-      <obj_property name="ElementShortName">apb_pwdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">apb_pwdata[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider35">
       <obj_property name="label">UART PERIPHERAL</obj_property>
@@ -123,5 +87,45 @@
    <wvobject fp_name="/soc_top_tb/uut/my_uart/my_raw_uart/rx_done" type="logic">
       <obj_property name="ElementShortName">rx_done</obj_property>
       <obj_property name="ObjectShortName">rx_done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_bridge/hwdata" type="array">
+      <obj_property name="ElementShortName">hwdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">hwdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_bridge/pwdata" type="array">
+      <obj_property name="ElementShortName">pwdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pwdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_bridge/prdata" type="array">
+      <obj_property name="ElementShortName">prdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">prdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_uart/prdata" type="array">
+      <obj_property name="ElementShortName">prdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">prdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_uart/pwdata" type="array">
+      <obj_property name="ElementShortName">pwdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pwdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_cpu/hrdata" type="array">
+      <obj_property name="ElementShortName">hrdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">hrdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_spi/my_spi_core/tx_byte" type="array">
+      <obj_property name="ElementShortName">tx_byte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_byte[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_spi/my_spi_core/rx_byte" type="array">
+      <obj_property name="ElementShortName">rx_byte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_byte[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_bridge/penable" type="logic">
+      <obj_property name="ElementShortName">penable</obj_property>
+      <obj_property name="ObjectShortName">penable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_top_tb/uut/my_bridge/psel" type="logic">
+      <obj_property name="ElementShortName">psel</obj_property>
+      <obj_property name="ObjectShortName">psel</obj_property>
    </wvobject>
 </wave_config>

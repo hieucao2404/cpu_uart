@@ -37,7 +37,9 @@ module ahb_to_apb(
     output reg penable,
     output reg pwrite,
     output reg [31:0] paddr,
-    output reg [31:0] pwdata
+    output reg [31:0] pwdata,
+    
+    input [31:0] prdata
     );
     
     //
@@ -122,6 +124,6 @@ module ahb_to_apb(
           end
           
           //For now, hardwire hrdata to 0. Map when RX loopback
-          assign hrdata = 32'h0;         
+          assign hrdata = prdata;         
     
 endmodule
