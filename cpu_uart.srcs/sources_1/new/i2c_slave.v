@@ -51,6 +51,7 @@ module i2c_slave #(
     
     // Check start and stop conditions
     always @(sda) begin
+        #1;
         //Staryt condition (SDA drops while SCL is high)
         if(sda == 0 && scl == 1) begin
             start <= 1;

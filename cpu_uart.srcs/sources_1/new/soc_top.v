@@ -84,14 +84,14 @@ module soc_top (
     wire spi_clk_en;
     wire i2c_clk_en;
     
-    wire gated_uart_clk = clk & uart_clk_en;
-    wire gated_spi_clk  = clk & spi_clk_en;
-    wire gated_i2c_clk  = clk & i2c_clk_en; // I2C Clock Gate
+    wire gated_uart_clk = clk & (uart_clk_en | reset);
+    wire gated_spi_clk  = clk & (spi_clk_en  | reset);
+    wire gated_i2c_clk  = clk & (i2c_clk_en  | reset);
     
-    // 3. The Data & Stall Multiplexer
-    // The CPU must stall if ANY selected peripheral asks it to wait.
-    assign hready = hready_apb & hready_ram & hready_spi & hready_pmu & hready_i2c;
-    
+//    // 3. The Data & Stall Multiplexer
+//    // The CPU must stall if ANY selected peripheral asks it to wait.
+//    assign hready = hready_apb & hready_ram & hready_spi & hready_pmu & hready_i2c;
+     assign hready = hready_apb & hready_ram & hready_spi & hready_pmu & hready_i2c;
     // Route the requested read data back to the CPU based on the address space
     assign hrdata = is_apb ? hrdata_apb : 
                     is_spi ? hrdata_spi : 
@@ -102,10 +102,9 @@ module soc_top (
 
     // 3. The Data & Stall Multiplexer
     // The CPU must stall if ANY selected peripheral asks it to wait.
-    assign hready = hready_apb & hready_ram & hready_spi & hready_pmu;
+//    assign hready = hready_apb & hready_ram & hready_spi & hready_pmu;
     
-    // Route the requested read data back to the CPU based on the address space
-    assign hrdata = is_apb ? hrdata_apb : is_spi ? hrdata_spi : is_pmu ? hrdata_pmu : is_i2c ? hrdata_i2c : hrdata_ram;
+ 
 
     // =========================================================================
     // MODULE INSTANTIATIONS
@@ -210,6 +209,7 @@ module soc_top (
     );
     
     ahb_i2c my_i2c (
+        .sys_clk(clk),
         .hclk(gated_i2c_clk),
         .hresetn(~reset),
         .hsel(hsel_i2c),

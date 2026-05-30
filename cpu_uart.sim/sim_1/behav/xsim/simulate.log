@@ -1,0 +1,7 @@
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+--------------------------------------------------
+RISC-V SoC Full-Duplex Loopback Test Started.
+--------------------------------------------------
+Time: 20000 | CPU Booted. Executing Machine Code...
+Time: 245000 | TX Pin changed to: 0
