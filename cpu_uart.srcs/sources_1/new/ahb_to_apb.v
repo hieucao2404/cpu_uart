@@ -65,7 +65,7 @@ module ahb_to_apb(
             current_state <= next_state;
             
             // If we are starting a transfer, latch the address phase!
-            if(hsel && htrans == 2'b10 && current_state == ST_IDLE) begin
+           if(hsel && htrans == 2'b10 && (current_state == ST_IDLE || current_state == ST_ACCESS)) begin
                 saved_addr <=  haddr;
                 saved_write <=  hwrite;
             end 
@@ -117,7 +117,9 @@ module ahb_to_apb(
             pwrite = saved_write;
             pwdata = hwdata;
             
-            next_state = ST_IDLE;
+           
+                next_state = ST_IDLE;
+            
             end
             endcase
             

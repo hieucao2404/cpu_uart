@@ -61,6 +61,9 @@ read_verilog -library xil_defaultlib {
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc D:/vivado/cpu_uart/cpu_uart.srcs/constrs_1/new/new.xdc
+set_property used_in_implementation false [get_files D:/vivado/cpu_uart/cpu_uart.srcs/constrs_1/new/new.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 

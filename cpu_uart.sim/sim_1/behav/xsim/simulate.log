@@ -4,4 +4,21 @@ Time resolution is 1 ps
 RISC-V SoC Full-Duplex Loopback Test Started.
 --------------------------------------------------
 Time: 20000 | CPU Booted. Executing Machine Code...
+Time: 75000 | PMU clk_enable_reg = 00000004
+Time: 105000 | I2C start, addr = 57, rw = 1, tx = 00
+Time: 165000 | PMU clk_enable_reg = 00000000
+Time: 185000 | PMU clk_enable_reg = 00000001
 Time: 245000 | TX Pin changed to: 0
+Time: 365000 | PMU clk_enable_reg = 00000000
+Time: 385000 | PMU clk_enable_reg = 00000002
+Time: 585000 | SPI done, rx = 5a
+Time: 645000 | PMU clk_enable_reg = 00000000
+Time: 8925000 | TX Pin changed to: 1
+Time: 26285000 | TX Pin changed to: 0
+Time: 34965000 | TX Pin changed to: 1
+Time: 43645000 | TX Pin changed to: 0
+Time: 49115000 | I2C done, master rx = cd, slave rx = 00
+Time: 52325000 | TX Pin changed to: 1
+Time: 61005000 | TX Pin changed to: 0
+Time: 69685000 | TX Pin changed to: 1
+Time: 82745000 | UART RX done, data = ab

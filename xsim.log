@@ -1,0 +1,45 @@
+#-----------------------------------------------------------
+# xsim v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Tue Jul  7 21:35:26 2026
+# Process ID: 30080
+# Current directory: D:/vivado/cpu_uart
+# Command line: xsim.exe -mode tcl -source {xsim.dir/tb_soc_top_behav/xsim_script.tcl}
+# Log file: D:/vivado/cpu_uart/xsim.log
+# Journal file: D:/vivado/cpu_uart\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb_soc_top_behav/xsim_script.tcl
+# xsim {tb_soc_top_behav} -view {{D:/vivado/cpu_uart/soc_top_tb_behav.wcfg}} -runall
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config D:/vivado/cpu_uart/soc_top_tb_behav.wcfg
+run -all
+--------------------------------------------------
+RISC-V SoC Full-Duplex Loopback Test Started.
+--------------------------------------------------
+Time: 20000 | CPU Booted. Executing Machine Code...
+Time: 75000 | PMU clk_enable_reg = 00000004
+Time: 105000 | I2C start, addr = 57, rw = 1, tx = 00
+Time: 165000 | PMU clk_enable_reg = 00000000
+Time: 185000 | PMU clk_enable_reg = 00000001
+Time: 245000 | TX Pin changed to: 0
+Time: 365000 | PMU clk_enable_reg = 00000000
+Time: 385000 | PMU clk_enable_reg = 00000002
+Time: 585000 | SPI done, rx = 5a
+Time: 645000 | PMU clk_enable_reg = 00000000
+Time: 8925000 | TX Pin changed to: 1
+Time: 26285000 | TX Pin changed to: 0
+Time: 34965000 | TX Pin changed to: 1
+Time: 43645000 | TX Pin changed to: 0
+Time: 49115000 | I2C done, master rx = cd, slave rx = 00
+Time: 52325000 | TX Pin changed to: 1
+Time: 61005000 | TX Pin changed to: 0
+Time: 69685000 | TX Pin changed to: 1
+Time: 82745000 | UART RX done, data = ab
+--------------------------------------------------
+Simulation Complete. Check the waveform for rx_data!
+--------------------------------------------------
+$finish called at time : 2000020 ns : File "D:/vivado/cpu_uart/cpu_uart.srcs/sim_1/new/soc_top_tb.v" Line 111
+exit
+INFO: [Common 17-206] Exiting xsim at Tue Jul  7 21:35:28 2026...

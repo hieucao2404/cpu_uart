@@ -1,0 +1,12 @@
+
+{ 
+    crc :  4712769091374425081  , 
+    ccp_crc :  0  , 
+    cmdline : " --incr --debug typical --relax --mt 2 -L work -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_soc_top_clean_behav work.tb_soc_top" , 
+    buildDate : "Dec  7 2018" , 
+    buildTime : "00:33:28" , 
+    linkCmd : "D:\\vivado\\Vivado\\2018.3\\data\\..\\tps\\mingw\\6.2.0\\win64.o\\nt\\bin\\gcc.exe -Wa,-W  -O -Wl,--stack,104857600 -o \"xsim.dir/tb_soc_top_clean_behav/xsimk.exe\"   \"xsim.dir/tb_soc_top_clean_behav/obj/xsim_0.win64.obj\" \"xsim.dir/tb_soc_top_clean_behav/obj/xsim_1.win64.obj\" -L\"D:\\vivado\\Vivado\\2018.3\\lib\\win64.o\" -lrdi_simulator_kernel  -lrdi_simbridge_kernel" , 
+    aggregate_nets : 
+    [ 
+    ] 
+} 

@@ -37,35 +37,31 @@ module tb_soc_top;
 // --- 1. Global Signals ---
     reg clk;
     reg reset;
-    
+
     // --- 2. SoC Physical Pins ---
     wire  rx_pin;
     wire tx_pin;
-    
-    // --- 3. SoC Debug Pins ---
-    wire [31:0] out_pc;
-    wire [31:0] out_alu_result;
-    
-    
+
+//    // --- 3. SoC Debug Pins ---
+//    wire [31:0] out_pc;
+//    wire [31:0] out_alu_result;
+
+
     // --- SPI Physical Pins
     wire mosi_pin;
     wire miso_pin;
     wire sclk_pin;
     wire cs_pin;
-    
+
     // --- I2C Physical Pins
     wire i2c_scl;
     wire i2c_sda;
-    
+
     // --- SPI Hardware Loopback ---
     assign miso_pin = mosi_pin;
-    // ---------------------------------------------------------
-    // 2. THE HARDWARE LOOPBACK
-    // This physically wires the transmit pin directly to the receive pin.
-    // Whatever the CPU shouts out of TX, it will immediately hear on RX.
-    // ---------------------------------------------------------
-    assign rx_pin = tx_pin;
 
+    // --- UART Hardware Loopback ---
+    assign rx_pin = tx_pin;
 
     // --- 4. Instantiate the Motherboard ---
     soc_top uut (
@@ -73,17 +69,17 @@ module tb_soc_top;
         .reset(reset),
         .rx_pin(rx_pin),
         .tx_pin(tx_pin),
-        
+
         .mosi_pin(mosi_pin),
         .miso_pin(miso_pin),
         .sclk_pin(sclk_pin),
         .cs_pin(cs_pin),
-        
+
         .i2c_sda(i2c_sda),
-        .i2c_scl(i2c_scl),
-        
-        .out_pc(out_pc),
-        .out_alu_result(out_alu_result)
+        .i2c_scl(i2c_scl)
+
+//        .out_pc(out_pc),
+//        .out_alu_result(out_alu_result)
     );
 
     // --- 5. Clock Generation (100MHz -> 10ns period) ---
@@ -107,17 +103,43 @@ module tb_soc_top;
 
         // Wait for 150,000 nanoseconds.
         // (115200 baud rate takes ~87,000ns for one complete 8-bit character)
-        #150000;
+        #2000000;
 
         $display("--------------------------------------------------");
         $display("Simulation Complete. Check the waveform for rx_data!");
         $display("--------------------------------------------------");
         $finish;
     end
-    
-   // 6. Real-time pin monitoring
+
+   // 7. Real-time pin monitoring
     always @(tx_pin) begin
         if ($time > 20) // Ignore initial unknown (X) states during reset
             $display("Time: %0t | TX Pin changed to: %b", $time, tx_pin);
     end
+
+    always @(uut.my_pmu.clk_enable_reg) begin
+        if ($time > 20)
+            $display("Time: %0t | PMU clk_enable_reg = %h", $time, uut.my_pmu.clk_enable_reg);
+    end
+
+    always @(posedge uut.my_uart.rx_done) begin
+        $display("Time: %0t | UART RX done, data = %h", $time, uut.my_uart.rx_data_out);
+    end
+
+    always @(posedge uut.my_spi.spi_done_pulse) begin
+        $display("Time: %0t | SPI done, rx = %h", $time, uut.my_spi.spi_rx_byte);
+    end
+
+    always @(posedge uut.my_i2c.i2c_enable_raw) begin
+        $display("Time: %0t | I2C start, addr = %h, rw = %b, tx = %h",
+                 $time, uut.my_i2c.i2c_addr, uut.my_i2c.i2c_rw, uut.my_i2c.i2c_tx_data);
+    end
+
+    always @(negedge uut.my_i2c.i2c_busy) begin
+        if ($time > 20)
+            $display("Time: %0t | I2C done, master rx = %h, slave rx = %h",
+                     $time, uut.my_i2c.i2c_rx_data, uut.my_i2c_slave.data_in);
+    end
+
+
 endmodule

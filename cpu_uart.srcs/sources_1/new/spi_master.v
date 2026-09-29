@@ -52,6 +52,11 @@ module spi_master(
         state <= IDLE;
         cs <= 1;
         sclk <= 0;
+        mosi <= 0;
+        tx_shift <= 8'h00;
+        rx_shift <= 8'h00;
+        rx_byte <= 8'h00;
+        bit_count <= 3'd0;
         done <= 0;
         end
         else begin
@@ -66,6 +71,7 @@ module spi_master(
           if(start) begin
             cs <= 0;
             tx_shift <= {tx_byte[6:0], 1'b0}; // Shift early
+            rx_shift <= 8'h00;
             mosi <= tx_byte[7];               // Drive first bit immediately
             bit_count <= 0;
             state <= TRANSFER;

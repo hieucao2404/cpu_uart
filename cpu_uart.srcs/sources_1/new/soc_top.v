@@ -15,12 +15,13 @@ module soc_top (
     
     //I2C Physical Pis
     inout wire i2c_sda,
-    output wire i2c_scl,
+    output wire i2c_scl
     
-    // Debug/Implementation pins
-    output wire [31:0] out_pc,
-    output wire [31:0] out_alu_result
+//    // Debug/Implementation pins
+//    output wire [31:0] out_pc,
+//    output wire [31:0] out_alu_result
 );
+    //wire clk;
 
   // --- AHB-Lite Master Wires (From CPU) ---
     wire [31:0] haddr;
@@ -79,14 +80,73 @@ module soc_top (
     assign hsel_pmu = is_pmu & (htrans == 2'b10);
     assign hsel_i2c = is_i2c & (htrans == 2'b10);
     
-    // --- CLOCK GATING WIRES ---
+   // --- CLOCK GATING WIRES (From PMU) ---
     wire uart_clk_en;
     wire spi_clk_en;
     wire i2c_clk_en;
     
-    wire gated_uart_clk = clk & (uart_clk_en | reset);
-    wire gated_spi_clk  = clk & (spi_clk_en  | reset);
-    wire gated_i2c_clk  = clk & (i2c_clk_en  | reset);
+    // --- GRACE PERIOD TIMERS ---
+    // We use different sized counters because the protocols run at different speeds.
+    reg [15:0]  uart_grace_counter; // Keep UART alive long enough for a full 115200 baud frame
+    reg        uart_clk_en_ext;
+
+    reg [4:0]  spi_grace_counter;  // 31 cycles is plenty for SPI's final shift
+    reg        spi_clk_en_ext;
+
+    reg [15:0] i2c_grace_counter;  // Keep I2C alive long enough for a full 400 kHz transaction
+    reg        i2c_clk_en_ext;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            uart_grace_counter <= 16'd0;
+            uart_clk_en_ext    <= 1'b0;
+
+            spi_grace_counter  <= 5'd0;
+            spi_clk_en_ext     <= 1'b0;
+
+            i2c_grace_counter  <= 16'd0;
+            i2c_clk_en_ext     <= 1'b0;
+        end else begin
+            // 1. UART Timer
+            if (uart_clk_en) begin
+                uart_grace_counter <= 16'd12000;
+                uart_clk_en_ext    <= 1'b1;
+            end else if (uart_grace_counter != 0) begin
+                uart_grace_counter <= uart_grace_counter - 1;
+                uart_clk_en_ext    <= 1'b1;
+            end else begin
+                uart_clk_en_ext    <= 1'b0;
+            end
+
+            // 2. SPI Timer
+            if (spi_clk_en) begin
+                spi_grace_counter <= 5'd31;
+                spi_clk_en_ext    <= 1'b1;
+            end else if (spi_grace_counter != 0) begin
+                spi_grace_counter <= spi_grace_counter - 1;
+                spi_clk_en_ext    <= 1'b1;
+            end else begin
+                spi_clk_en_ext    <= 1'b0;
+            end
+
+            // 3. I2C Timer (Longer countdown)
+            if (i2c_clk_en) begin
+                i2c_grace_counter <= 16'd20000;
+                i2c_clk_en_ext    <= 1'b1;
+            end else if (i2c_grace_counter != 0) begin
+                i2c_grace_counter <= i2c_grace_counter - 1;
+                i2c_clk_en_ext    <= 1'b1;
+            end else begin
+                i2c_clk_en_ext    <= 1'b0;
+            end
+        end
+    end
+
+    // --- FINAL GATED CLOCKS ---
+    // Apply the extended enable signals to the clock gating AND gates
+    wire gated_uart_clk = clk & (uart_clk_en_ext | reset);
+    wire gated_spi_clk  = clk & (spi_clk_en_ext  | reset);
+    wire gated_i2c_clk  = clk & (i2c_clk_en_ext  | reset);
     
 //    // 3. The Data & Stall Multiplexer
 //    // The CPU must stall if ANY selected peripheral asks it to wait.
@@ -112,13 +172,14 @@ module soc_top (
 
     // 1. The CPU Core (AHB Master)
     // We invert the active-high board reset to match the AHB active-low standard
+    (* dont_touch = "true" *)
     cpu_core my_cpu (
         .hclk(clk),
         .hresetn(~reset),
         
         // Debug
-        .out_pc(out_pc),
-        .out_alu_result(out_alu_result),
+//        .out_pc(out_pc),
+//        .out_alu_result(out_alu_result),
         
         // AHB Bus
         .haddr(haddr),

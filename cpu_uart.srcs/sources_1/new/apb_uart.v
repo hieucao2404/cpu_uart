@@ -46,6 +46,7 @@ module apb_uart(
     
     wire [7:0] rx_data_out;
     wire       rx_done;
+    reg        tx_busy;
     
     // Convert APB active-low reset to your UART's active-high reset
     assign uart_reset = ~presetn;
@@ -73,15 +74,21 @@ module apb_uart(
         if(!presetn) begin
             tx_start <= 1'b0;
             tx_data_in <= 8'h00;
+            tx_busy <= 1'b0;
         end
         else begin
             //Default: do not start a transmission
             tx_start <= 1'b0;
+
+            if (tx_done) begin
+                tx_busy <= 1'b0;
+            end
             
             //If bus is selected, enabled and wrirint to TX Register(Offset 0x00)
             if(psel && penable && pwrite && paddr[7:0] == 8'h00) begin
                 tx_data_in <= pwdata[7:0];
                 tx_start <= 1'b1; // Send a 1-cycle pulse to start transmission
+                tx_busy <= 1'b1;
             end
          end
        end
@@ -108,7 +115,7 @@ module apb_uart(
         if(psel && !pwrite) begin
             case(paddr[7:0])
                 8'h04: prdata = {24'h0, rx_data_out}; //Read rx data
-                8'h08: prdata = {30'h0, rx_data_ready, tx_active};// read statis
+                8'h08: prdata = {30'h0, tx_busy, rx_data_ready};// read statis
                 default: prdata = 32'h0;
              endcase
          end
